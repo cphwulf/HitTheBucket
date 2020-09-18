@@ -1,4 +1,4 @@
-Ball[] balls; //<>// //<>//
+Ball[] balls; //<>// //<>// //<>//
 Box[] boxes;
 PointBall pointBall;
 boolean[] controls;
@@ -6,7 +6,7 @@ boolean pBallMove;
 int SIZEOFARRAY=5;
 int limit=5;
 int boxSize;
-int boxHeight;
+float boxHeight;
 int space=2;
 int scale;
 float offSet;
@@ -22,7 +22,7 @@ void setup() {
   size(800, 600);
   boxSize=70;
   offSet=60;
-  boxHeight=height/4;
+  boxHeight=height/4.0;
   scale=(int) (boxSize*1.7);
   float xSpeed=1;
   float ySpeed=1;
@@ -33,7 +33,7 @@ void setup() {
   float diameter = (boxSize)*1.0;
   for (int i=1; i<=balls.length; i++) {
     controls[i-1]=false; 
-    tmpBox = new Box(i*scale+offSet, height-boxHeight, boxSize, height-boxHeight);
+    tmpBox = new Box(i*scale+offSet, height-boxHeight, boxSize, height-boxHeight); //<>//
     boxes[i-1]=tmpBox;
 
     tmpBall = new Ball(
@@ -61,15 +61,36 @@ void draw() {
     }
   }
   if (pBallMove) {
-    if (pointBall.yPos< boxes[0].yPos) {
-      // have a hit?
-      if (inBoxesXrange(pointBall.xPos)) {
-      }
-      pointBall.move(1);
+    //if (pointBall.yPos < boxes[0].yPos) {
+    if (interSect(pointBall, boxes[0])) {
+      println("Hitting ... ");
     }
-    pointBall.display();
+    // have a hit?
+    if (inBoxesXrange(pointBall.xPos)) {
+    }
+    pointBall.move(1);
+  }
+  pointBall.display();
+  if(pointBall.yPos>height) {
+    noLoop();
   }
 }
+
+
+boolean interSect(PointBall pb, Box box) {
+  boolean retVal=false; //<>//
+  float boxLeftCornerxPos=box.xPos+box.boxWidth;
+  float boxLeftCorneryPos=box.yPos-box.boxHeight;
+  
+  float dist= sqrt(pow(pb.xPos-boxLeftCornerxPos,2)+pow(pb.yPos-boxLeftCorneryPos,2));
+  println(" interS: " + boxLeftCornerxPos + " "+ boxLeftCorneryPos +" dist: " + dist);
+  if (dist<(pb.radius+box.boxWidth/2)) {
+    retVal=true;
+  } 
+  return retVal ; 
+}
+
+
 
 
 void keyPressed() {
@@ -98,16 +119,15 @@ boolean inBoxesXrange(float xPos) {
   for (int i=0; i<boxes.length; i++) {
     xPosses[i]=boxes[i].xPos;
   }
-  float searchVal = binSearch(xPosses,xPos,boxSize);
+  float searchVal = binSearch(xPosses, xPos, boxSize);
 
-  boolean retVal=false; //<>//
+  boolean retVal=false;
 
   return retVal;
 }
 
 float binSearch(float[] arr, float target, float tagetWidth) {
   float retVal = 0;
-  
+
   return retVal;
-  
 }

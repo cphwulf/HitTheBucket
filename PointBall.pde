@@ -45,7 +45,7 @@ class PointBall {
   }
 
   void move(int factor) {
-    println("Called m ");
+    println("Called m in pball");
     yPos=yPos+ySpeed;
     ySpeed=ySpeed+gravity;   
     xPos=xPos+xSpeed;
